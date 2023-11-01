@@ -1,17 +1,25 @@
 import { Component } from "react";
-import { View, Button, Text } from "@tarojs/components";
+import { View, Button, Text, CustomWrapper } from "@tarojs/components";
 
-import Txt from "./Txt.jsx";
 import "./index.less";
 
 class Index extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      // counter: 1, 
-      show: true };
+    this.state = {
+      counter: 1,
+      innerCounter: 1,
+      show: true,
+    };
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState((preState) => ({
+        innerCounter: preState.innerCounter + 1,
+      }));
+    }, 100);
+  }
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
@@ -23,31 +31,29 @@ class Index extends Component {
   componentDidHide() {}
 
   render() {
+    console.log("render", this.state);
     return (
-      <View className="index">
+      <View>
         <Button
-          className="add_btn"
           onClick={() => {
-            this.setState({
-              // counter: this.state.counter + 1,
-              show: !this.state.show,
-            });
-            this.txt.update();
+            this.setState((preState) => ({
+              counter: preState.counter + 1,
+              innerCounter: preState.innerCounter + 1,
+              show: !preState.show,
+            }));
           }}
         >
           +
         </Button>
-        {/* <Text> outer:{this.state.counter}{this.state.show}</Text> */}
         {this.state.show && (
           <View>
             <Text>Show</Text>
           </View>
         )}
-          <Txt
-            ref={(e) => {
-              this.txt = e;
-            }}
-          ></Txt>
+        <Text>outer:{this.state.counter}</Text>
+        <CustomWrapper>
+          <Text>CustomWrapper inner:{this.state.innerCounter}</Text>
+        </CustomWrapper>
       </View>
     );
   }
